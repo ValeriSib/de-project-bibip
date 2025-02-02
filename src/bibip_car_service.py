@@ -62,7 +62,7 @@ class CarService:
 
     # Задание 1. Сохранение автомобилей и моделей
     def add_car(self, car: Car) -> Car:
-        with open(GetInfo.path_to_dir(self.dir_path, ‘cars.txt’), 'a') as cars_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'cars.txt'), 'a') as cars_file:
             cars_string: str = f'{car.vin},{car.model},{car.price},{car.date_start},{car.status}'.ljust(
                 500)
             cars_file.write(cars_string + '\n')
@@ -73,7 +73,7 @@ class CarService:
         self.cars_index.append(car_index)
         self.cars_index.sort(key=lambda x: x.id)
 
-        with open(GetInfo.path_to_dir(self.dir_path, ‘cars_index.txt’), 'w') as cars_index_file:
+        with open(GetInfo.path_to_dir (self.dir_path, 'cars_index.txt'), 'w') as cars_index_file:
             for cars_index in self.cars_index:
                 string_index_model: str = f'{cars_index.id},{cars_index.symbol_position}'.ljust(
                     50)
@@ -83,7 +83,7 @@ class CarService:
     # Задание 2. Сохранение продаж.
     def sell_car(self, sale: Sale) -> Car:
         # записываем данные о продаже
-        with open(GetInfo.path_to_dir(self.dir_path, ‘sales.txt’), 'a') as sale_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'sales.txt'), 'a') as sale_file:
             sale_string: str = f'{sale.sales_number},{sale.car_vin},{sale.sales_date},{sale.cost}'.ljust(
                 500)
             sale_file.write(sale_string + '\n')
@@ -95,7 +95,7 @@ class CarService:
         self.sales_index.sort(key=lambda x: x.id)
 
         # ищем строку в списке автомобилей
-        with open(GetInfo.path_to_dir(self.dir_path, ‘sales_index.txt’), 'w+') as sales_index_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'sales_index.txt'), 'w+') as sales_index_file:
             for sales_index in self.sales_index:
                 string_index_model: str = f'{sales_index.id},{sales_index.symbol_position}'.ljust(
                     50)
@@ -106,7 +106,7 @@ class CarService:
                 num_car_row: int = int(car_index.symbol_position)
 
         # обновляем статус на sold
-        with open(GetInfo.path_to_dir(self.dir_path, ‘cars.txt’), 'r+') as cars_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'cars.txt'), 'r+') as cars_file:
             cars_file.seek((500+1) * num_car_row)
             row_value: str = cars_file.read(500)
             car_row_line: list = row_value.strip().split(',')
@@ -120,7 +120,7 @@ class CarService:
     # Задание 3. Доступные к продаже
     def get_cars(self, status: CarStatus) -> list[Car]:
 
-        with open(GetInfo.path_to_dir(self.dir_path, ‘cars.txt’), 'r') as cars_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'cars.txt'), 'r') as cars_file:
             cars_line: list[str] = cars_file.readlines()
             split_lines = [line.strip().split(',') for line in cars_line]
             return [
@@ -137,15 +137,15 @@ class CarService:
         # проверка наличия индексов
         if not self.cars_index:
             self.cars_index = GetInfo.index_cash(
-                GetInfo.path_to_dir(self.dir_path, ‘cars_index.txt’))
+                GetInfo.path_to_dir(self.dir_path, 'cars_index.txt'))
 
         if not self.sales_index:
             self.sales_index = GetInfo.index_cash(
-                GetInfo.path_to_dir(self.dir_path, ‘sales_index.txt’))
+                GetInfo.path_to_dir(self.dir_path, 'sales_index.txt'))
 
         if not self.models_index:
             self.models_index = GetInfo.index_cash(
-                GetInfo.path_to_dir(self.dir_path, ‘models_index.txt’))
+                GetInfo.path_to_dir(self.dir_path, 'models_index.txt'))
 
         # ищем номер строки автомобиля num_car_row
         cars = {
@@ -157,7 +157,7 @@ class CarService:
         num_car_row: str = cars.get(vin)
 
         # читаем информацию об автомобиле из файла cars.txt
-        with open(GetInfo.path_to_dir(self.dir_path, ‘cars.txt’), 'r') as cars_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'cars.txt'), 'r') as cars_file:
             cars_file.seek(int(num_car_row) * (500+1))
             car_row_value: str = cars_file.read(500)
             car_value: list = car_row_value.strip().split(',')
@@ -168,7 +168,7 @@ class CarService:
                 continue
             num_model_row: str = model_index.symbol_position
 
-        with open(GetInfo.path_to_dir(self.dir_path, ‘models.txt’), 'r') as models_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'models.txt'), 'r') as models_file:
             models_file.seek(int(num_model_row) * 500+1)
             model_row_value: str = models_file.read(500)
             model_value: list = model_row_value.strip().split(',')
@@ -179,8 +179,8 @@ class CarService:
                 continue
             num_sale_row: str = sale_index.symbol_position
 
-        if os.path.exists(GetInfo.path_to_dir(self.dir_path, ‘sales.txt’)):
-            with open(GetInfo.path_to_dir(self.dir_path, ‘sales.txt’), 'r') as sales_file:
+        if os.path.exists(GetInfo.path_to_dir(self.dir_path, 'sales.txt')):
+            with open(GetInfo.path_to_dir(self.dir_path, 'sales.txt'), 'r') as sales_file:
                 sales_file.seek(int(num_sale_row) * 500+1)
                 sale_row_value: str = sales_file.read(500)
                 sale_value: list = sale_row_value.strip().split(',')
@@ -190,8 +190,11 @@ class CarService:
             car_model_name=model_value[1],
             car_model_brand=model_value[2],
             price=car_value[2],
-            date_start=car_value[3]
-
+            date_start=car_value[3],
+            status=car_value[4],
+            sales_date=None if car_value[4] != CarStatus.sold else sale_value[2],
+            sales_cost=None if car_value[4] != CarStatus.sold else sale_value[3]
+        )
         # передаем информацию в класс CarFullInfo
         return CarFullInfo(**parameters)
 
@@ -199,7 +202,7 @@ class CarService:
     def update_vin(self, vin: str, new_vin: str) -> Car:
         if not self.cars_index:
             self.cars_index = GetInfo.index_cash(
-                GetInfo.path_to_dir(self.dir_path, ‘cars_index.txt’))
+                GetInfo.path_to_dir(self.dir_path, 'cars_index.txt'))
 
         cars = {
             car_index.id: car_index.symbol_position for car_index in self.cars_index}
@@ -208,14 +211,14 @@ class CarService:
         self.cars_index = cars_index
         self.cars_index.sort(key=lambda x: x.id)
 
-        with open(GetInfo.path_to_dir(self.dir_path, ‘cars_index.txt’), 'w') as cars_index_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'cars_index.txt'), 'w') as cars_index_file:
             for car_index in cars_index:
                 cars_index_file.write(
                     f'{car_index.id},{car_index.symbol_position}'.ljust(50))
 
         num_car_row: Optional[str] = cars.get(vin)
 
-        with open(GetInfo.path_to_dir(self.dir_path, ‘cars.txt’), 'r+') as cars_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'cars.txt'), 'r+') as cars_file:
             cars_file.seek((500+1) * int(num_car_row))
             row_value: str = cars_file.read(500)
             car_row_line: list = row_value.strip().split(',')
@@ -228,31 +231,31 @@ class CarService:
     def revert_sale(self, sales_number: str) -> Car:
 
         car_vin: Optional[str] = None
-        with open(GetInfo.path_to_dir(self.dir_path, ‘sales.txt’), 'r') as sales_read_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'sales.txt'), 'r') as sales_read_file:
             file_value: list = sales_read_file.readlines()
-        with open(GetInfo.path_to_dir(self.dir_path, ‘sales.txt’), 'w') as sales_write_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'sales.txt'), 'w') as sales_write_file:
             for value in file_value:
                 if sales_number not in value:
                     sales_write_file.write(value)
                 else:
                     car_vin = value.strip().split(',')[1]
 
-        with open(GetInfo.path_to_dir(self.dir_path,  ‘sales_index.txt’), 'r') as sales_index_read_file:
+        with open(GetInfo.path_to_dir(self.dir_path,  'sales_index.txt'), 'r') as sales_index_read_file:
             file_value: list = sales_index_read_file.readlines()
-        with open(GetInfo.path_to_dir(self.dir_path, ‘sales_index.txt’), 'w') as sales_index_write_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'sales_index.txt'), 'w') as sales_index_write_file:
             for value in file_value:
                 if car_vin not in value:
                     sales_index_write_file.write(value)
 
         if not self.cars_index:
             self.cars_index = GetInfo.index_cash(
-                GetInfo.path_to_dir(self.dir_path, ‘cars_index.txt’))
+                GetInfo.path_to_dir(self.dir_path, 'cars_index.txt'))
 
         cars = {
             car_index.id: car_index.symbol_position for car_index in self.cars_index}
         num_car_row: str = cars.get(car_vin)
 
-        with open(GetInfo.path_to_dir(self.dir_path, ‘cars.txt’), 'r+') as cars_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'cars.txt'), 'r+') as cars_file:
             cars_file.seek(int(num_car_row) * (500+1))
             car_row_value: str = cars_file.read(500)
             car_value: list = car_row_value.strip().split(',')
@@ -263,7 +266,7 @@ class CarService:
 
     # Задание 7. Самые продаваемые модели
     def top_models_by_sales(self) -> list[ModelSaleStats]:
-        with open(GetInfo.path_to_dir(self.dir_path, ‘sales.txt’), 'r') as sales_read_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'sales.txt'), 'r') as sales_read_file:
             file_value: list = sales_read_file.readlines()
 
         # создаем словарь с vin-кодом и ценой продажи
@@ -275,21 +278,21 @@ class CarService:
         #загружаем индексы авто
         if not self.cars_index:
             self.cars_index = GetInfo.index_cash(
-                GetInfo.path_to_dir(self.dir_path, ‘cars_index.txt’))
+                GetInfo.path_to_dir(self.dir_path, 'cars_index.txt'))
 
         # выбор строк с продаными авто
         cars_row: list = [int(car_index.symbol_position)
                           for car_index in self.cars_index if car_index.id in sales_history.keys()]
-        with open(GetInfo.path_to_dir(self.dir_path, ‘cars.txt’), 'r') as cars_read_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'cars.txt'), 'r') as cars_read_file:
             salon_cars: dict = {row_value.strip().split(',')[0]: row_value.strip().split(',')[1] for row_number, row_value in enumerate(
                 cars_read_file.readlines()) if row_number in cars_row and row_value != '\n'}
 
         if not self.models_index:
             self.models_index = GetInfo.index_cash(
-                GetInfo.path_to_dir(self.dir_path, ‘models_index.txt’))
+                GetInfo.path_to_dir(self.dir_path, 'models_index.txt'))
         models_row: list = [
             model_index.symbol_position for model_index in self.models_index if model_index.id in salon_cars.values()]
-        with open(GetInfo.path_to_dir(self.dir_path, ‘models.txt’), 'r') as models_read_file:
+        with open(GetInfo.path_to_dir(self.dir_path, 'models.txt'), 'r') as models_read_file:
             salon_models: dict = {row_value.strip().split(',')[0]: [row_value.strip().split(',')[1], row_value.strip(
             ).split(',')[2]] for row_number, row_value in enumerate(models_read_file) if str(row_number) in models_row}
 
