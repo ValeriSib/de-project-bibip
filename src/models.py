@@ -21,6 +21,9 @@ class Car(BaseModel):
 
     def index(self) -> str:
         return self.vin
+    
+    def change_status(self, new_status: CarStatus) -> None:
+        self.status = new_status
 
 
 class Model(BaseModel):
